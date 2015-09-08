@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Wheniwork\\OAuth2\\Client\\": "src/"
+            "Cargix1\\OAuth2\\Client\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Wheniwork\\OAuth2\\Client\\Test\\": "tests/src/"
+            "Cargix1\\OAuth2\\Client\\Test\\": "tests/src/"
         }
     }
 }
