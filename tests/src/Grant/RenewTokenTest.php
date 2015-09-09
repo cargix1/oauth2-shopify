@@ -1,9 +1,9 @@
 <?php
 
-namespace Wheniwork\OAuth2\Client\Test\Grant;
+namespace Cargix1\OAuth2\Client\Test\Grant;
 
-use Wheniwork\OAuth2\Client\Provider\Square;
-use Wheniwork\OAuth2\Client\Grant\RenewToken;
+use Cargix1\OAuth2\Client\Provider\Square;
+use Cargix1\OAuth2\Client\Grant\RenewToken;
 
 use Mockery as m;
 

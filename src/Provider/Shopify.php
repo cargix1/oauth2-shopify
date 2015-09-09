@@ -1,9 +1,6 @@
 <?php
-
 namespace Cargix1\OAuth2\Client\Provider;
-
 use Cargix1\OAuth2\Client\Grant\RenewToken;
-
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Exception\IDPException;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -13,13 +10,17 @@ use League\OAuth2\Client\Grant\RefreshToken;
 class Shopify extends AbstractProvider
 {
 
-    protected $api_key;
+    public $api_key;
 
-    protected $scopes;
+    public $scopes;
 
-    protected $redirect_uri;
+    public $redirectUri;
 
-    protected $state;
+    public $state;
+
+    public $shop;
+
+    public $nonce;
 
     /**
      * Get a Square connect URL, depending on path.
@@ -27,20 +28,21 @@ class Shopify extends AbstractProvider
      * @param  string $store_url
      * @return string
      */
-    protected function getConnectUrl($store_url)
+    protected function getConnectUrl()
     {
-        return "https://".$store_url.".myshopify.com/admin/";
+        return "https://".$this->shop.".myshopify.com/admin/oauth/authorize";
     }
 
     public function urlAuthorize()
     {
-        return $this->getConnectUrl('oauth/authorize');
+        return "https://".$this->shop.".myshopify.com/admin/oauth/authorize";
     }
 
     public function urlAccessToken()
     {
-        return $this->getConnectUrl('oauth/access_token');
+        return "https://".$this->shop.".myshopify.com/admin/oauth/access_token";
     }
+
 
     /**
      * Get the URL for rewnewing an access token.
@@ -50,14 +52,23 @@ class Shopify extends AbstractProvider
      *
      * @return string
      */
-    // public function urlRenewToken()
-    // {
-    //     return $this->getConnectUrl(sprintf(
-    //         'oauth2/clients/%s/access-token/renew',
-    //         $this->clientId
-    //     ));
-    // }
+    public function urlRenewToken()
+    {
+        return $this->getConnectUrl(sprintf(
+            'oauth2/clients/%s/access-token/renew',
+            $this->clientId
+        ));
+    }
 
+    public function urlUserDetails(AccessToken $token)
+    {
+        // Todo
+    }
+
+    public function userDetails($response, AccessToken $token)
+    {
+        // Todo
+    }
 
     /**
      * Provides support for token renewal instead of token refreshing.
@@ -79,7 +90,9 @@ class Shopify extends AbstractProvider
         }
 
         if (!($grant instanceof RenewToken)) {
-            return parent::getAccessToken($grant, $params);
+            $token = parent::getAccessToken($grant, $params);
+            dd($token);
+            return $token;
         }
 
         $requestParams = $grant->prepRequestParams([], $params);
@@ -124,8 +137,6 @@ class Shopify extends AbstractProvider
 
     protected function prepareAccessTokenResult(array $result)
     {
-        // Square uses a ISO 8601 timestamp to represent the expiration date.
-        // http://docs.connect.squareup.com/#post-token
         $result['expires_in'] = strtotime($result['expires_at']) - time();
 
         return parent::prepareAccessTokenResult($result);

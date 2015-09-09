@@ -1,4 +1,4 @@
-# Shopify Provider for OAuth 2.0 Client
+# Shopify Provider for OAuth 2.0 Client - WORK IN PROGRESS
 
 This package provides Shopify OAuth 2.0 support for the PHP League's [OAuth 2.0 Client](https://github.com/thephpleague/oauth2-client).
 
